@@ -1,0 +1,26 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.metrics import accuracy_score
+
+print('all libraries imported succefully')
+data=pd.read_csv("C:\\Users\\Trupti\\Downloads\\Housing.csv")
+print("import data succesfully")
+for_map={'yes':1 , 'no':0 , 'furnished':1 , 'unfurnished':0 , 'semi-furnished':2}
+categorical_data=['guestroom','mainroad','basement','hotwaterheating','airconditioning','prefarea','furnishingstatus']
+for i in categorical_data:
+    data[i] =data[i].map(for_map)
+
+print('categorical data is converted to numerical data succesfuly')
+
+x=data.drop('price',axis=1)
+y=data['price']
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=3)
+model=AdaBoostClassifier()
+model.fit(x_train,y_train)
+y_pred=model.predict(x_test)
+corr=sum(y_pred==y_test)   #to calculate how much values our model have predicted right
+length=len(y_test)      #to calculate length of actual test data
+print(corr/length)     #formula to calculate the accuracy score
+
